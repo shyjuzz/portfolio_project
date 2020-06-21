@@ -2,11 +2,12 @@ class Assets {
   Assets._();
 
   static const String programmer3 = 'assets/images/programmer-3.gif';
+  static const String sm = 'assets/images/sm.jpg';
+  static const String pro = 'assets/images/pro.jpg';
 
   // social icons
-  static const String dribble = 'assets/icons/ic_dribbble.png';
-  static const String evernote = 'assets/icons/ic_evernote.png';
-  static const String google = 'assets/icons/ic_google.png';
-  static const String twitter = 'assets/icons/ic_twitter.png';
-  static const String linkedin = 'assets/icons/ic_linkedIn.png';
+  static const String stack = 'assets/icons/stack.png';
+  static const String hacker = 'assets/icons/hackerr.png';
+  static const String github = 'assets/icons/github.png';
+  static const String linkedin = 'assets/icons/linkedin.png';
 }

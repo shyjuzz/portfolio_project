@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Shyju M',
       theme: ThemeData(
           brightness: Brightness.light,
           primaryColorBrightness: Brightness.light,

@@ -1,4 +1,5 @@
 import 'dart:html' as html;
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shyju_portfolio/constants/assets.dart';
 import 'package:shyju_portfolio/constants/fonts.dart';
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
       titleSpacing: 0.0,
-      title: _buildTitle(),
+//      title: _buildTitle(),
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       actions:
@@ -130,7 +131,7 @@ class HomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Expanded(flex: 1, child: _buildContent(context)),
-                _buildIllustration(),
+                _buildIllustration(context),
               ],
             ),
           ),
@@ -165,6 +166,8 @@ class HomePage extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          _buildIllustration(context),
+          Divider(),
           Expanded(flex: 1, child: _buildContent(context)),
           Divider(),
           _buildCopyRightText(context),
@@ -179,11 +182,31 @@ class HomePage extends StatelessWidget {
   }
 
   // Body Methods:--------------------------------------------------------------
-  Widget _buildIllustration() {
-    return Image.network(
-      Assets.programmer3,
-      height: ScreenUtil.getInstance().setWidth(345), //480.0
-    );
+  Widget _buildIllustration(BuildContext context) {
+    profileImage(context) => Container(
+          height: ResponsiveWidget.isSmallScreen(context)
+              ? MediaQuery.of(context).size.height * 0.20
+              : MediaQuery.of(context).size.width * 0.25,
+          width: ResponsiveWidget.isSmallScreen(context)
+              ? MediaQuery.of(context).size.height * 0.20
+              : MediaQuery.of(context).size.width * 0.25,
+          decoration: BoxDecoration(
+            backgroundBlendMode: BlendMode.luminosity,
+            color: Colors.deepOrange,
+//            borderRadius: BorderRadius.circular(40),
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: Image.network(Assets.sm).image,
+              alignment: Alignment.center,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+//    return Image.network(
+//      Assets.programmer3,
+//      height: ScreenUtil.getInstance().setWidth(345), //480.0
+//    );
+    return profileImage(context);
   }
 
   Widget _buildContent(BuildContext context) {
@@ -197,7 +220,7 @@ class HomePage extends StatelessWidget {
         SizedBox(height: 4.0),
         _buildHeadline(context),
         SizedBox(height: ResponsiveWidget.isSmallScreen(context) ? 12.0 : 24.0),
-        _buildSummary(),
+        _buildSummary(context),
         SizedBox(height: ResponsiveWidget.isSmallScreen(context) ? 24.0 : 48.0),
         ResponsiveWidget.isSmallScreen(context)
             ? Column(
@@ -207,6 +230,17 @@ class HomePage extends StatelessWidget {
                   _buildEducation(),
                   SizedBox(height: 24.0),
                   _buildSkills(context),
+//                  RaisedButton(
+//                    shape: StadiumBorder(),
+//                    child: Text("Resume"),
+//                    color: Colors.red,
+//                    onPressed: () {
+////                      html.window.open(
+////                          "https://google-developers.appspot.com/community/experts/directory/profile/profile-pawan_kumar",
+////                          "GDE");
+//                    },
+//                    padding: EdgeInsets.all(10),
+//                  ),
                 ],
               )
             : _buildSkillsAndEducation(context)
@@ -217,47 +251,64 @@ class HomePage extends StatelessWidget {
   Widget _buildAboutMe(BuildContext context) {
     return RichText(
       text: TextSpan(
-        // Note: Styles for TextSpans must be explicitly defined.
-        // Child text spans will inherit styles from parent
         style: TextStyle(
           fontSize: 14.0,
           color: Colors.black,
         ),
         children: <TextSpan>[
           TextSpan(
-            text: Strings.about,
+            text: "Hi there! My name is",
             style: TextStyles.heading.copyWith(
               fontFamily: Fonts.nexa_light,
-              fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
+              fontSize: ResponsiveWidget.isSmallScreen(context) ? 18 : 30.0,
             ),
           ),
-          TextSpan(
-            text: Strings.me,
-            style: TextStyles.heading.copyWith(
-              color: Color(0xFF50AFC0),
-              fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
-            ),
-          ),
+//          TextSpan(
+//            text: 'Shyju M',
+//            style: TextStyles.heading.copyWith(
+//              color: Color(0xFF50AFC0),
+//              fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
+//            ),
+//          ),
         ],
       ),
     );
+    return Text(
+      "Hi there! My name is",
+      textScaleFactor: 2,
+      style: TextStyle(color: Colors.orange),
+    );
+//    Text(
+//    "Pawan\nKumar",
+//    textScaleFactor: 5,
+//    style: TextStyle(
+//    color: Colors.white,
+//    fontWeight: FontWeight.bold,
+//    ),
+//    ),
   }
 
   Widget _buildHeadline(BuildContext context) {
     return Text(
-      ResponsiveWidget.isSmallScreen(context)
-          ? Strings.headline
-          : Strings.headline.replaceFirst(RegExp(r' f'), '\nf'),
-      style: TextStyles.sub_heading,
+      'Shyju M',
+//      ResponsiveWidget.isSmallScreen(context)
+//          ? Strings.headline
+//          : Strings.headline.replaceFirst(RegExp(r' f'), '\nf'),
+      style: TextStyles.heading.copyWith(
+        color: Color(0xFF50AFC0),
+        fontSize: ResponsiveWidget.isSmallScreen(context) ? 36 : 45.0,
+      ),
     );
   }
 
-  Widget _buildSummary() {
+  Widget _buildSummary(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(right: 80.0),
       child: Text(
-        Strings.summary,
-        style: TextStyles.body,
+        Strings.headline,
+        style: TextStyles.body.copyWith(
+          fontSize: ResponsiveWidget.isSmallScreen(context) ? 15 : 20.0,
+        ),
       ),
     );
   }
@@ -281,12 +332,27 @@ class HomePage extends StatelessWidget {
 
   // Skills Methods:------------------------------------------------------------
   final skills = [
-    'Dart',
     'Flutter',
+    'Dart',
     'Xamarin',
+    'Xamarin Forms',
     'Python',
     'Java',
     'Android',
+    'C#',
+    'Tornado',
+    'SQLite',
+    'PostgreSQL',
+    'Firebase',
+    'Elastic Search',
+    'MongoDB',
+    'MySQL',
+    'HTML',
+    'CSS',
+    'JavaScript',
+    'TFS',
+    'SVN',
+    'GIT'
   ];
 
   Widget _buildSkills(BuildContext context) {
@@ -302,6 +368,7 @@ class HomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _buildSkillsContainerHeading(),
+        SizedBox(height: 10.0,),
         Wrap(children: widgets),
 //        _buildNavigationArrows(),
       ],
@@ -317,10 +384,13 @@ class HomePage extends StatelessWidget {
 
   Widget _buildSkillChip(BuildContext context, String label) {
     return Chip(
+//      backgroundColor: Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
+    backgroundColor: Color(0xFF50AFC0),
       label: Text(
         label,
         style: TextStyles.chip.copyWith(
-          fontSize: ResponsiveWidget.isSmallScreen(context) ? 10.0 : 11.0,
+          color: Colors.white,
+          fontSize: ResponsiveWidget.isSmallScreen(context) ? 12.0 : 14.0,
         ),
       ),
     );
@@ -344,7 +414,7 @@ class HomePage extends StatelessWidget {
       'Aug 2014',
       'Feb 2018',
       'Cognizant Technology Solutions',
-      'Software Engineer',
+      'Associate',
     ),
   ];
 
@@ -368,10 +438,11 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildEducationSummary() {
-    return Text(
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      style: TextStyles.body,
-    );
+    return Divider();
+//    return Text(
+//      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+//      style: TextStyles.body,
+//    );
   }
 
   Widget _buildEducationTimeline() {
@@ -398,7 +469,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Text(
-            '${education.from}-${education.to}',
+            '${education.from} - ${education.to}',
             style: TextStyles.body,
           ),
         ],
@@ -453,7 +524,7 @@ class HomePage extends StatelessWidget {
           },
           child: Image.network(
             Assets.linkedin,
-            color: Color(0xFF45405B),
+//            color: Color(0xFF45405B),
             height: 20.0,
             width: 20.0,
           ),
@@ -461,11 +532,11 @@ class HomePage extends StatelessWidget {
         SizedBox(width: 16.0),
         GestureDetector(
           onTap: () {
-//            html.window.open("https://medium.com/@zubairehman.work", "Medium");
+            html.window.open("https://stackoverflow.com/users/2863386/shyju-madathil", "Stack Overflow");
           },
           child: Image.network(
-            Assets.evernote,
-            color: Color(0xFF45405B),
+            Assets.stack,
+//            color: Color(0xFF45405B),
             height: 20.0,
             width: 20.0,
           ),
@@ -476,8 +547,8 @@ class HomePage extends StatelessWidget {
             html.window.open("https://github.com/shyjuzz", "Github");
           },
           child: Image.network(
-            Assets.google,
-            color: Color(0xFF45405B),
+            Assets.github,
+//            color: Color(0xFF45405B),
             height: 20.0,
             width: 20.0,
           ),
@@ -485,11 +556,11 @@ class HomePage extends StatelessWidget {
         SizedBox(width: 16.0),
         GestureDetector(
           onTap: () {
-//            html.window.open("https://twitter.com/zubair340", "Twitter");
+            html.window.open("https://www.hackerrank.com/shyjuzz", "Hacker Rank");
           },
           child: Image.network(
-            Assets.twitter,
-            color: Color(0xFF45405B),
+            Assets.hacker,
+//            color: Color(0xFF45405B),
             height: 20.0,
             width: 20.0,
           ),
